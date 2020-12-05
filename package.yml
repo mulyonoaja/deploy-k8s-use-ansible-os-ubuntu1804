@@ -1,0 +1,56 @@
+- hosts: all
+  become: yes
+  tasks:
+   - name: instal apt transport https for dependencies
+     apt:
+       name: "{{item}}"
+       state: present
+     with_items:
+       - 'apt-transport-https'
+       - 'ca-certificates'
+       - 'curl'
+       - 'gnupg-agent'
+       - 'software-properties-common'
+
+   - name: installing docker.io latest version
+     apt:
+       name: docker.io
+       state: present
+       update_cache: true
+
+   - name: copy daemon.json for docker driver
+     copy:
+       src: etc/docker/daemon.json
+       dest: /etc/docker/daemon.json
+
+   - name: start and enable docker service
+     command: "{{item}}"
+     with_items:
+      - sudo mkdir -p /etc/systemd/system/docker.service.d
+      - sudo systemctl daemon-reload
+      - sudo systemctl enable docker
+      - sudo systemctl restart docker
+
+   - name: import k8s pubkey
+     apt_key:
+       url: https://packages.cloud.google.com/apt/doc/apt-key.gpg
+       state: present
+
+   - name: import k8s repo
+     apt_repository:
+      repo: deb http://apt.kubernetes.io/ kubernetes-xenial main
+      state: present
+      filename: 'kubernetes'
+   - name: install kubelet, kubeadm, kubectl
+     apt:
+       name: "{{item}}"
+       state: present
+       update_cache: true
+       force: yes
+     with_items:
+       - 'kubelet'
+       - 'kubeadm'
+       - 'kubectl'
+
+   - name: mark kubelet kubeadm kubectl as hold from upgrade version
+     shell: apt-mark hold kubelet kubeadm kubectl
