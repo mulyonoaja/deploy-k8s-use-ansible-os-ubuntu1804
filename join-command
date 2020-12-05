@@ -1,0 +1,1 @@
+kubeadm join 172.31.19.134:6443 --token 3szayd.y9x0iycihgqfgove     --discovery-token-ca-cert-hash sha256:d86efe7ff2817e50e0228b9351dea2f784eac684014048d5919ec8077181f7ca
