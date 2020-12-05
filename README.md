@@ -5,6 +5,7 @@ Langkah-langkah install Ansible di OS UBUNTU 18:04 AWS EC2
 
 
 
+
 # config file for ansible -- https://ansible.com/
 # ===============================================
 
@@ -33,4 +34,6 @@ Langkah-langkah install Ansible di OS UBUNTU 18:04 AWS EC2
 #remote_port    = 22
 #module_lang    = C
 #module_set_locale = False
+
+
 
